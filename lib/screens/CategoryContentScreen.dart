@@ -1,51 +1,21 @@
 import 'dart:io';
 
 import 'package:android_intent/android_intent.dart';
-import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:wallpapers/models/PopUpMenuItems.dart';
-import 'package:wallpapers/screens/CategoriesScreen.dart';
-import 'package:wallpapers/screens/SearchScreen.dart';
-import 'DisplayWallpapers.dart';
+import 'package:wallpapers/screens/DisplayWallpapers.dart';
 
-class HomeScreen extends StatefulWidget {
+import 'SearchScreen.dart';
+
+class CategoryContentScreen extends StatefulWidget {
+  final String url, title;
+  CategoryContentScreen({this.title, this.url});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _CategoryContentScreenState createState() => _CategoryContentScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  PageController _pageController;
-  static var _tabPages = <Widget>[
-    CategoriesScreen(),
-    DisplayWallpapers(
-        "https://pixabay.com/api/?key=11308358-67ad92507710cb90567e4924c" +
-            "&image_type=photo&orientation=vertical&safesearch=true&order=latest"),
-    DisplayWallpapers(
-        "https://pixabay.com/api/?key=11308358-67ad92507710cb90567e4924c" +
-            "&orientation=vertical&safesearch=true&editors_choice=true"),
-    DisplayWallpapers(
-        "https://pixabay.com/api/?key=11308358-67ad92507710cb90567e4924c&safesearch=true")
-  ];
-  static var _tabs = <TabData>[
-    TabData(
-      iconData: Icons.category,
-      title: "Categories",
-    ),
-    TabData(
-      iconData: Icons.new_releases,
-      title: "Latest",
-    ),
-    TabData(
-      iconData: Icons.trending_up,
-      title: "Trending",
-    ),
-    TabData(
-      iconData: Icons.all_inclusive,
-      title: "All",
-    )
-  ];
-  int _currentTab = 0;
+class _CategoryContentScreenState extends State<CategoryContentScreen> {
   bool _isSearching = false;
   TextEditingController _searchController;
   String _searchInput;
@@ -53,13 +23,11 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
     _searchController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -103,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
                 },
               )
             : Text(
-                "WALLPAPERS",
+                '${widget.title[0].toUpperCase()}${widget.title.substring(1)}',
                 style: TextStyle(
                   color: Colors.yellowAccent,
                   fontSize: 30.0,
@@ -145,30 +113,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ],
       ),
-      body: PageView(
-        physics: new NeverScrollableScrollPhysics(),
-        onPageChanged: (index) {
-          setState(() {
-            _currentTab = index;
-          });
-        },
-        controller: _pageController,
-        children: _tabPages,
-      ),
-      bottomNavigationBar: FancyBottomNavigation(
-        initialSelection: _currentTab,
-        tabs: _tabs,
-        onTabChangedListener: (position) {
-          setState(() {
-            _currentTab = position;
-          });
-          _pageController.animateToPage(
-            position,
-            duration: Duration(milliseconds: 200),
-            curve: Curves.easeIn,
-          );
-        },
-      ),
+      body: DisplayWallpapers(widget.url),
     );
   }
 
@@ -237,7 +182,4 @@ class _HomeScreenState extends State<HomeScreen>
         break;
     }
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

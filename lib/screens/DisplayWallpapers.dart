@@ -7,7 +7,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wallpapers/screens/ShowWallpaper.dart';
 
 class DisplayWallpapers extends StatefulWidget {
-  String url;
+  final String url;
   DisplayWallpapers(this.url);
 
   @override
@@ -16,10 +16,7 @@ class DisplayWallpapers extends StatefulWidget {
 
 class _DisplayWallpapersState extends State<DisplayWallpapers>
     with AutomaticKeepAliveClientMixin {
-  int _currentPage = 0;
-  String url =
-      "https://pixabay.com/api/?key=11308358-67ad92507710cb90567e4924c&category=sports" +
-          "&image_type=photo&safesearch=true&orientation=vertical&page=";
+  int _currentPage = 0, _totalItems = 0;
   bool isDataLoaded = false, _isLoadingMore = false, _isError = false;
   List data = List();
   ScrollController _scrollController = ScrollController();
@@ -27,10 +24,12 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
   @override
   void initState() {
     super.initState();
+    print('called again');
     _scrollController.addListener(() {
       if ((_scrollController.position.pixels ==
               _scrollController.position.maxScrollExtent) &&
-          !_isLoadingMore) {
+          !_isLoadingMore &&
+          _totalItems != data.length) {
         _isLoadingMore = true;
         getJsonData();
       }
@@ -65,10 +64,12 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
           crossAxisCount: 4,
           itemCount: data.length + 1,
           itemBuilder: (context, i) {
-            if (i == data.length)
+            if (i == data.length) {
+              if (_totalItems == i) return SizedBox.shrink();
               return Center(
                 child: CircularProgressIndicator(),
               );
+            }
 
             String imgPath = data[i]['largeImageURL'];
             return Material(
@@ -76,14 +77,18 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
               borderRadius: BorderRadius.circular(10.0),
               child: InkWell(
                 child: Hero(
-                    tag: imgPath,
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          Image.asset('images/place_holder.png'),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: imgPath,
-                    )),
+                  tag: imgPath,
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      child: Image.asset('images/loading-1.gif'),
+                      color: Color(0xFF21242D),
+                      alignment: Alignment.center,
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    imageUrl: imgPath,
+                  ),
+                ),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ShowWallpaper(imgPath)));
@@ -111,7 +116,7 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
     print('fetch data call');
     _currentPage += 1;
     var response = await http.get(
-      Uri.encodeFull(url + _currentPage.toString()),
+      Uri.encodeFull(widget.url + _currentPage.toString()),
     );
 
     var convertDataToJson;
@@ -123,6 +128,7 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
       });
       return "error";
     } finally {
+      _totalItems = convertDataToJson['totalHits'];
       setState(() {
         data.addAll(convertDataToJson['hits']);
         isDataLoaded = true;
