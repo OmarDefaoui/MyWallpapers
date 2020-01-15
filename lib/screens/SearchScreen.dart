@@ -24,10 +24,12 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xff323639),
         title: Text(
           widget.keyword,
           style: TextStyle(
             fontSize: 25,
+            color: Colors.white,
           ),
         ),
       ),

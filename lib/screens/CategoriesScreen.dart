@@ -35,7 +35,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     'music',
   ];
   final List<String> _categoriesImages = [
-    'https://pixabay.com/get/52e6dc454f51a514f6da8c7dda79367f163fd6e656596c48702872d4944ec251bc_1280.jpg',
+    'https://pixabay.com/get/52e6dc454f51a514f6da8c7dda79367f163fd6e656596c48702872d5954fc051b0_1280.jpg',
     'https://pixabay.com/get/52e7d6404e54ab14f6da8c7dda79367f163fd6e656596c48702872d49449c55ebf_1280.jpg',
     'https://pixabay.com/get/52e7d5474a55ae14f6da8c7dda79367f163fd6e656596c48702872d49449c459ba_1280.jpg',
     'https://pixabay.com/get/52e7d1454f53af14f6da8c7dda79367f163fd6e656596c48702872d49449c759bd_1280.jpg',
@@ -56,11 +56,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     'https://pixabay.com/get/52e7d14a4c5aad14f6da8c7dda79367f163fd6e656596c48702872d49448cd5fb8_1280.jpg',
     'https://pixabay.com/get/52e7d3434854a914f6da8c7dda79367f163fd6e656596c48702872d49448cc58ba_1280.jpg',
   ];
+ 
   @override
   Widget build(BuildContext context) {
     var _width = MediaQuery.of(context).size.width;
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: Color(0xff323639),
       child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: GridView.builder(

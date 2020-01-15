@@ -1,5 +1,7 @@
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:wallpapers/functions/InterstitialAd.dart';
 import 'package:wallpapers/functions/ShowAction.dart';
 import 'package:wallpapers/models/PopUpMenuItems.dart';
 import 'package:wallpapers/screens/CategoriesScreen.dart';
@@ -21,7 +23,8 @@ class _HomeScreenState extends State<HomeScreen>
         "&image_type=photo&orientation=vertical&safesearch=true&order=latest&page="),
     DisplayWallpapers("https://pixabay.com/api/?key=$apiKey" +
         "&orientation=vertical&safesearch=true&editors_choice=true&page="),
-    DisplayWallpapers("https://pixabay.com/api/?key=$apiKey&safesearch=true&page=")
+    DisplayWallpapers(
+        "https://pixabay.com/api/?key=$apiKey&safesearch=true&page=")
   ];
   static var _tabs = <TabData>[
     TabData(
@@ -46,24 +49,29 @@ class _HomeScreenState extends State<HomeScreen>
   TextEditingController _searchController;
   String _searchInput;
 
+  InterstitialAd _interstitialAd;
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
     _searchController = TextEditingController();
+    _initAds();
   }
 
   @override
   void dispose() {
+    super.dispose();
     _pageController.dispose();
     _searchController.dispose();
-    super.dispose();
+    _interstitialAd?.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xff323639),
         title: _isSearching
             ? TextField(
                 controller: _searchController,
@@ -101,13 +109,12 @@ class _HomeScreenState extends State<HomeScreen>
             : Text(
                 _showActionBarTitle(),
                 style: TextStyle(
-                  color: Colors.yellowAccent,
-                  fontSize: 30.0,
+                  color: Colors.white,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
                 ),
               ),
-        backgroundColor: Colors.black87,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
@@ -154,6 +161,8 @@ class _HomeScreenState extends State<HomeScreen>
       bottomNavigationBar: FancyBottomNavigation(
         initialSelection: _currentTab,
         tabs: _tabs,
+        barBackgroundColor: Color(0xff323639),
+        textColor: Colors.white,
         onTabChangedListener: (position) {
           setState(() {
             _currentTab = position;
@@ -198,6 +207,13 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {
       _isSearching = false;
     });
+  }
+
+  _initAds() {
+    FirebaseAdMob.instance.initialize(appId: admobAppId);
+    _interstitialAd = createInterstitialAd(1)
+      ..load()
+      ..show();
   }
 
   @override

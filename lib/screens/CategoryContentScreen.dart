@@ -1,7 +1,10 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:wallpapers/functions/InterstitialAd.dart';
 import 'package:wallpapers/functions/ShowAction.dart';
 import 'package:wallpapers/models/PopUpMenuItems.dart';
 import 'package:wallpapers/screens/DisplayWallpapers.dart';
+import 'package:wallpapers/utils/ApiKey.dart';
 
 import 'SearchScreen.dart';
 
@@ -18,16 +21,20 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
   TextEditingController _searchController;
   String _searchInput;
 
+  InterstitialAd _interstitialAd;
+
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
+    _initAds();
   }
 
   @override
   void dispose() {
     super.dispose();
     _searchController.dispose();
+    _interstitialAd?.dispose();
   }
 
   @override
@@ -71,13 +78,13 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
             : Text(
                 '${widget.title[0].toUpperCase()}${widget.title.substring(1)}',
                 style: TextStyle(
-                  color: Colors.yellowAccent,
-                  fontSize: 30.0,
+                  color: Colors.white,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
                 ),
               ),
-        backgroundColor: Colors.black87,
+        backgroundColor: Color(0xff323639),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
@@ -134,5 +141,12 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
     setState(() {
       _isSearching = false;
     });
+  }
+
+   _initAds() {
+    FirebaseAdMob.instance.initialize(appId: admobAppId);
+    _interstitialAd = createInterstitialAd(2)
+      ..load()
+      ..show();
   }
 }

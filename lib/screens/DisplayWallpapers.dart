@@ -41,13 +41,13 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
     if (_isError)
       //return error form with retry button
       return Container(
-        color: Colors.black,
+        color: Color(0xff323639),
         child: Center(
           child: Text(
             'Error',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 50,
+              fontSize: 40,
             ),
           ),
         ),
@@ -55,7 +55,7 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
 
     if (isDataLoaded)
       return Container(
-        color: Colors.black,
+        color: Color(0xff323639),
         child: StaggeredGridView.countBuilder(
           physics: BouncingScrollPhysics(),
           controller: _scrollController,
@@ -109,7 +109,7 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
             valueColor: new AlwaysStoppedAnimation<Color>(Colors.yellowAccent),
           ),
         ),
-        color: Colors.black,
+        color: Color(0xff323639),
       );
   }
 
