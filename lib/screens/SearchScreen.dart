@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallpapers/utils/ApiKey.dart';
 
 import 'DisplayWallpapers.dart';
 
@@ -37,7 +38,7 @@ class _SearchScreenState extends State<SearchScreen> {
   _setupUrl() {
     query = widget.keyword.replaceAll(' ', '+');
 
-    url = "https://pixabay.com/api/?key=11308358-67ad92507710cb90567e4924c" +
+    url = "https://pixabay.com/api/?key=$apiKey" +
         "&image_type=photo&safesearch=true&orientation=vertical&q=$query&page=";
     print(url);
   }

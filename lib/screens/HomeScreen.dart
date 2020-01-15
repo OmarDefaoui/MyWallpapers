@@ -1,11 +1,10 @@
-import 'dart:io';
-
-import 'package:android_intent/android_intent.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:wallpapers/functions/ShowAction.dart';
 import 'package:wallpapers/models/PopUpMenuItems.dart';
 import 'package:wallpapers/screens/CategoriesScreen.dart';
 import 'package:wallpapers/screens/SearchScreen.dart';
+import 'package:wallpapers/utils/ApiKey.dart';
 import 'DisplayWallpapers.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,14 +17,11 @@ class _HomeScreenState extends State<HomeScreen>
   PageController _pageController;
   static var _tabPages = <Widget>[
     CategoriesScreen(),
-    DisplayWallpapers(
-        "https://pixabay.com/api/?key=11308358-67ad92507710cb90567e4924c" +
-            "&image_type=photo&orientation=vertical&safesearch=true&order=latest"),
-    DisplayWallpapers(
-        "https://pixabay.com/api/?key=11308358-67ad92507710cb90567e4924c" +
-            "&orientation=vertical&safesearch=true&editors_choice=true"),
-    DisplayWallpapers(
-        "https://pixabay.com/api/?key=11308358-67ad92507710cb90567e4924c&safesearch=true")
+    DisplayWallpapers("https://pixabay.com/api/?key=$apiKey" +
+        "&image_type=photo&orientation=vertical&safesearch=true&order=latest&page="),
+    DisplayWallpapers("https://pixabay.com/api/?key=$apiKey" +
+        "&orientation=vertical&safesearch=true&editors_choice=true&page="),
+    DisplayWallpapers("https://pixabay.com/api/?key=$apiKey&safesearch=true&page=")
   ];
   static var _tabs = <TabData>[
     TabData(
@@ -76,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen>
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(vertical: 15),
                   border: InputBorder.none,
-                  hintText: 'Search...',
+                  hintText: 'Search wallpaper...',
                   hintStyle: TextStyle(color: Colors.grey.shade400),
                   prefixIcon: IconButton(
                       icon: Icon(Icons.search),
@@ -103,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen>
                 },
               )
             : Text(
-                "WALLPAPERS",
+                _showActionBarTitle(),
                 style: TextStyle(
                   color: Colors.yellowAccent,
                   fontSize: 30.0,
@@ -123,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           PopupMenuButton<PopUpMenuItems>(
             onSelected: (item) {
-              _showAction(item.title);
+              showAction(item.title);
             },
             itemBuilder: (BuildContext context) {
               return popUpMenuItems.map((PopUpMenuItems item) {
@@ -172,6 +168,17 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
+  String _showActionBarTitle() {
+    try {
+      if (_pageController.page == 0.0)
+        return "CATEGORIES";
+      else
+        return "WALLPAPERS";
+    } catch (error) {
+      return "CATEGORIES";
+    }
+  }
+
   _searchWallpapers(String keyword) {
     print('search wallpapers');
     _clearSearch();
@@ -191,51 +198,6 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {
       _isSearching = false;
     });
-  }
-
-  _showAction(String title) async {
-    print(title);
-    switch (title) {
-      case 'More apps':
-        if (Platform.isAndroid) {
-          AndroidIntent intent = AndroidIntent(
-            action: 'action_view',
-            data:
-                'https://play.google.com/store/apps/dev?id=5265766386525301972',
-          );
-          await intent.launch();
-        }
-        break;
-      case 'Share':
-        if (Platform.isAndroid) {
-          AndroidIntent intent = AndroidIntent(
-            action: 'action_view',
-            data:
-                'https://play.google.com/store/apps/details?id=com.nordef.notes',
-          );
-          await intent.launch();
-        }
-        break;
-      case 'Rate':
-        if (Platform.isAndroid) {
-          AndroidIntent intent = AndroidIntent(
-            action: 'action_view',
-            data:
-                'https://play.google.com/store/apps/details?id=com.nordef.notes',
-          );
-          await intent.launch();
-        }
-        break;
-      case 'Privacy policy':
-        if (Platform.isAndroid) {
-          AndroidIntent intent = AndroidIntent(
-            action: 'action_view',
-            data: 'https://www.google.com',
-          );
-          await intent.launch();
-        }
-        break;
-    }
   }
 
   @override

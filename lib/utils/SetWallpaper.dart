@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
 
-class Wallpaper {
+class SetWallpaper {
   static const MethodChannel _channel = const MethodChannel('wallpaper');
 
   static Future<String> get platformVersion async {
@@ -27,12 +29,6 @@ class Wallpaper {
   static Future<String> bothScreen() async {
     final String resultvar =
     await _channel.invokeMethod('Both', 'myimage.jpeg');
-    return resultvar;
-  }
-
-  static Future<String> systemScreen() async {
-    final String resultvar =
-    await _channel.invokeMethod('SystemWallpaer', 'myimage.jpeg');
     return resultvar;
   }
 
@@ -62,5 +58,14 @@ class Wallpaper {
     } catch (ex) {
       throw ex;
     }
+  }
+
+  static cropImage(File imageFile) async {
+    File croppedImage = await ImageCropper.cropImage(
+      sourcePath: imageFile.path,
+      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+    );
+
+    return croppedImage;
   }
 }

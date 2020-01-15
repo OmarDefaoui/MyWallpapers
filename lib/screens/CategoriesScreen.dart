@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wallpapers/screens/CategoryContentScreen.dart';
-import 'package:wallpapers/screens/DisplayWallpapers.dart';
+import 'package:wallpapers/utils/ApiKey.dart';
 
 class CategoriesScreen extends StatefulWidget {
   @override
@@ -9,9 +9,8 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  String url =
-      "https://pixabay.com/api/?key=11308358-67ad92507710cb90567e4924c" +
-          "&image_type=photo&orientation=vertical&safesearch=true&category=";
+  String url = "https://pixabay.com/api/?key=$apiKey" +
+      "&image_type=photo&orientation=vertical&safesearch=true&category=";
 
   final List<String> _categories = [
     'fashion',
@@ -115,14 +114,22 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           );
                         },
                         child: Container(
-                          color: Colors.black.withOpacity(0.35),
-                          alignment: Alignment.center,
+                          color: Colors.black.withOpacity(0.3),
+                          alignment: Alignment.bottomCenter,
+                          padding: EdgeInsets.only(bottom: _width * 0.03),
                           child: Text(
                             '${_categories[index][0].toUpperCase()}${_categories[index].substring(1)}',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                               fontSize: 22,
+                              shadows: <Shadow>[
+                                Shadow(
+                                  offset: Offset(0, 0),
+                                  blurRadius: 5,
+                                  color: Colors.black,
+                                ),
+                              ],
                             ),
                           ),
                         ),

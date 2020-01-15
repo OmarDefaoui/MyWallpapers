@@ -24,7 +24,6 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
   @override
   void initState() {
     super.initState();
-    print('called again');
     _scrollController.addListener(() {
       if ((_scrollController.position.pixels ==
               _scrollController.position.maxScrollExtent) &&
@@ -58,6 +57,7 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
       return Container(
         color: Colors.black,
         child: StaggeredGridView.countBuilder(
+          physics: BouncingScrollPhysics(),
           controller: _scrollController,
           addAutomaticKeepAlives: true,
           padding: EdgeInsets.all(4.0),
@@ -105,9 +105,10 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
       //show progress bar while loading data
       return Container(
         child: Center(
-            child: CircularProgressIndicator(
-                valueColor:
-                    new AlwaysStoppedAnimation<Color>(Colors.yellowAccent))),
+          child: CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation<Color>(Colors.yellowAccent),
+          ),
+        ),
         color: Colors.black,
       );
   }

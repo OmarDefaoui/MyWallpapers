@@ -1,7 +1,5 @@
-import 'dart:io';
-
-import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
+import 'package:wallpapers/functions/ShowAction.dart';
 import 'package:wallpapers/models/PopUpMenuItems.dart';
 import 'package:wallpapers/screens/DisplayWallpapers.dart';
 
@@ -28,8 +26,8 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
 
   @override
   void dispose() {
-    _searchController.dispose();
     super.dispose();
+    _searchController.dispose();
   }
 
   @override
@@ -44,7 +42,7 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(vertical: 15),
                   border: InputBorder.none,
-                  hintText: 'Search...',
+                  hintText: 'Search wallpaper...',
                   hintStyle: TextStyle(color: Colors.grey.shade400),
                   prefixIcon: IconButton(
                       icon: Icon(Icons.search),
@@ -91,7 +89,7 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
           ),
           PopupMenuButton<PopUpMenuItems>(
             onSelected: (item) {
-              _showAction(item.title);
+              showAction(item.title);
             },
             itemBuilder: (BuildContext context) {
               return popUpMenuItems.map((PopUpMenuItems item) {
@@ -136,50 +134,5 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
     setState(() {
       _isSearching = false;
     });
-  }
-
-  _showAction(String title) async {
-    print(title);
-    switch (title) {
-      case 'More apps':
-        if (Platform.isAndroid) {
-          AndroidIntent intent = AndroidIntent(
-            action: 'action_view',
-            data:
-                'https://play.google.com/store/apps/dev?id=5265766386525301972',
-          );
-          await intent.launch();
-        }
-        break;
-      case 'Share':
-        if (Platform.isAndroid) {
-          AndroidIntent intent = AndroidIntent(
-            action: 'action_view',
-            data:
-                'https://play.google.com/store/apps/details?id=com.nordef.notes',
-          );
-          await intent.launch();
-        }
-        break;
-      case 'Rate':
-        if (Platform.isAndroid) {
-          AndroidIntent intent = AndroidIntent(
-            action: 'action_view',
-            data:
-                'https://play.google.com/store/apps/details?id=com.nordef.notes',
-          );
-          await intent.launch();
-        }
-        break;
-      case 'Privacy policy':
-        if (Platform.isAndroid) {
-          AndroidIntent intent = AndroidIntent(
-            action: 'action_view',
-            data: 'https://www.google.com',
-          );
-          await intent.launch();
-        }
-        break;
-    }
   }
 }

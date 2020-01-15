@@ -1,5 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:wallpapers/utils/wallpaper.dart';
+import 'package:wallpapers/utils/SetWallpaper.dart';
 
 class ShowWallpaper extends StatefulWidget {
   final String imgPath;
@@ -12,10 +13,7 @@ class ShowWallpaper extends StatefulWidget {
 
 class _ShowWallpaperState extends State<ShowWallpaper> {
   String imgUrl;
-  String home = "Home Screen",
-      lock = "Lock Screen",
-      both = "Both Screen",
-      system = "System";
+  String home = "Home Screen", lock = "Lock Screen", both = "Both Screen";
 
   Stream<String> progressString;
   String res;
@@ -49,9 +47,19 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
                       Container(
                         width: width,
                         height: height,
-                        child: Image.network(
-                          imgUrl,
-                          fit: BoxFit.fill,
+                        child: Hero(
+                          tag: imgUrl,
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              child: Image.asset('images/loading-1.gif'),
+                              color: Color(0xFF21242D),
+                              alignment: Alignment.center,
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: imgUrl,
+                          ),
                         ),
                       ),
                       Wrap(
@@ -60,7 +68,7 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
                           RaisedButton(
                             onPressed: () {
                               progressString =
-                                  Wallpaper.imageDownloadProgress(imgUrl);
+                                  SetWallpaper.imageDownloadProgress(imgUrl);
                               progressString.listen((data) {
                                 setState(() {
                                   res = data;
@@ -68,7 +76,7 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
                                 });
                                 print("DataReceived: " + data);
                               }, onDone: () async {
-                                home = await Wallpaper.homeScreen();
+                                home = await SetWallpaper.homeScreen();
                                 setState(() {
                                   downloading = false;
                                   home = home;
@@ -94,14 +102,13 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
                                 ),
                               ),
                               padding: const EdgeInsets.all(10.0),
-                              child:
-                                  Text(home, style: TextStyle(fontSize: 14)),
+                              child: Text(home, style: TextStyle(fontSize: 14)),
                             ),
                           ),
                           RaisedButton(
                             onPressed: () {
                               progressString =
-                                  Wallpaper.imageDownloadProgress(imgUrl);
+                                  SetWallpaper.imageDownloadProgress(imgUrl);
                               progressString.listen((data) {
                                 setState(() {
                                   res = data;
@@ -109,7 +116,7 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
                                 });
                                 print("DataReceived: " + data);
                               }, onDone: () async {
-                                lock = await Wallpaper.lockScreen();
+                                lock = await SetWallpaper.lockScreen();
                                 setState(() {
                                   downloading = false;
                                   lock = lock;
@@ -135,14 +142,13 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
                                 ),
                               ),
                               padding: const EdgeInsets.all(10.0),
-                              child:
-                                  Text(lock, style: TextStyle(fontSize: 14)),
+                              child: Text(lock, style: TextStyle(fontSize: 14)),
                             ),
                           ),
                           RaisedButton(
                             onPressed: () {
                               progressString =
-                                  Wallpaper.imageDownloadProgress(imgUrl);
+                                  SetWallpaper.imageDownloadProgress(imgUrl);
                               progressString.listen((data) {
                                 setState(() {
                                   res = data;
@@ -150,7 +156,7 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
                                 });
                                 print("DataReceived: " + data);
                               }, onDone: () async {
-                                both = await Wallpaper.bothScreen();
+                                both = await SetWallpaper.bothScreen();
                                 setState(() {
                                   downloading = false;
                                   both = both;
@@ -176,8 +182,7 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
                                 ),
                               ),
                               padding: const EdgeInsets.all(10.0),
-                              child:
-                                  Text(both, style: TextStyle(fontSize: 14)),
+                              child: Text(both, style: TextStyle(fontSize: 14)),
                             ),
                           ),
                         ],
