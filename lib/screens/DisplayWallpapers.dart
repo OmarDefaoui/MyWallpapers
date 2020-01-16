@@ -72,6 +72,7 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
             }
 
             String imgPath = data[i]['largeImageURL'];
+            String previewURL = data[i]['webformatURL'];
             return Material(
               clipBehavior: Clip.antiAlias,
               borderRadius: BorderRadius.circular(10.0),
@@ -86,7 +87,7 @@ class _DisplayWallpapersState extends State<DisplayWallpapers>
                       alignment: Alignment.center,
                     ),
                     errorWidget: (context, url, error) => Icon(Icons.error),
-                    imageUrl: imgPath,
+                    imageUrl: previewURL,
                   ),
                 ),
                 onTap: () {

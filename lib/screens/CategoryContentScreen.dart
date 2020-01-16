@@ -27,7 +27,7 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    _initAds();
+    //_initAds();
   }
 
   @override
@@ -143,10 +143,12 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
     });
   }
 
-   _initAds() {
-    FirebaseAdMob.instance.initialize(appId: admobAppId);
-    _interstitialAd = createInterstitialAd(2)
-      ..load()
-      ..show();
+  _initAds() {
+    Future.delayed(const Duration(seconds: 2), () {
+      FirebaseAdMob.instance.initialize(appId: admobAppId);
+      _interstitialAd = createInterstitialAd(2)
+        ..load()
+        ..show();
+    });
   }
 }

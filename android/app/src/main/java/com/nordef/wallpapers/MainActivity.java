@@ -1,4 +1,4 @@
-package com.example.wallpapers;
+package com.nordef.wallpapers;
 
 import androidx.annotation.NonNull;
 
@@ -14,6 +14,6 @@ public class MainActivity extends FlutterActivity {
 
 
     ShimPluginRegistry shimPluginRegistry = new ShimPluginRegistry(flutterEngine);
-    com.example.wallpapers.WallpaperPlugin.registerWith(shimPluginRegistry.registrarFor("com.example.wallpapers.WallpaperPlugin"));
+    com.nordef.wallpapers.WallpaperPlugin.registerWith(shimPluginRegistry.registrarFor("com.nordef.wallpapers.WallpaperPlugin"));
   }
 }

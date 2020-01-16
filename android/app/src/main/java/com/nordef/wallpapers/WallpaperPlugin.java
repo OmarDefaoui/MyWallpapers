@@ -1,4 +1,4 @@
-package com.example.wallpapers;
+package com.nordef.wallpapers;
 
 import android.Manifest;
 import android.app.WallpaperManager;

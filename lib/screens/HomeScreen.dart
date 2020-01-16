@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
     _pageController = PageController();
     _searchController = TextEditingController();
-    _initAds();
+    //_initAds();
   }
 
   @override
@@ -210,10 +210,12 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   _initAds() {
-    FirebaseAdMob.instance.initialize(appId: admobAppId);
-    _interstitialAd = createInterstitialAd(1)
-      ..load()
-      ..show();
+    Future.delayed(const Duration(seconds: 2), () {
+      FirebaseAdMob.instance.initialize(appId: admobAppId);
+      _interstitialAd = createInterstitialAd(1)
+        ..load()
+        ..show();
+    });
   }
 
   @override
