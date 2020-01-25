@@ -34,27 +34,27 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     'business',
     'music',
   ];
-  final List<String> _categoriesImages = [
-    'https://cdn.pixabay.com/photo/2019/12/15/08/14/body-painting-4696539_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/10/00/04/climber-4754210_150.jpg',
-    'https://cdn.pixabay.com/photo/2019/12/18/13/59/christmas-4704072_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/15/14/29/europe-channel-4768094_150.jpg',
-    'https://cdn.pixabay.com/photo/2019/01/30/08/30/book-3964050_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/09/15/03/hands-4752991_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/09/21/45/valentines-day-4754007_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/13/16/11/kyrgyzstan-4762839_150.jpg',
-    'https://cdn.pixabay.com/photo/2019/12/30/03/28/banana-4728754_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/11/19/33/petra-4758513_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/12/09/27/cat-4759584_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/15/14/26/port-4768090_150.jpg',
-    'https://cdn.pixabay.com/photo/2019/11/19/13/10/clementine-4637398_150.jpg',
-    'https://cdn.pixabay.com/photo/2019/12/30/03/06/samsung-4728704_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/11/16/18/horse-4757973_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/12/08/52/helicopter-4759545_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/14/19/04/beach-4766019_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/11/18/38/goal-4758378_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/08/05/24/building-4749312_150.jpg',
-    'https://cdn.pixabay.com/photo/2020/01/15/08/23/guitar-4767277_150.jpg',
+  final List<String> _categoriesImages = [//replace
+    'https://drive.google.com/uc?id=1wgQfuncWagmcXOBuwXW95OjoEd6CJoEB',
+    'https://drive.google.com/uc?id=1NRh1J3I7aRvfnpRxIYHV42oygGEGyqot',
+    'https://drive.google.com/uc?id=1SKu9Z7gRec8vnuY4h27dphlFFFpCa3pw',
+    'https://drive.google.com/uc?id=1yBe5ln_Oy8Ez6RTGFuogULJf9qS81UAv',
+    'https://drive.google.com/uc?id=1vTogCJzhKmiZq1oDOOPKDkVIOg5gf7Nw',
+    'https://drive.google.com/uc?id=1yEAaSwJiMcWH1Y1u-AzKanDckl0F-BjP',
+    'https://drive.google.com/uc?id=1rPyR5BW16_A5QuniBxWNugZE_7kxqzUl',
+    'https://drive.google.com/uc?id=19b1rMf2Ke2aJ5FvYUMaRs-aFW4lp1fbs',
+    'https://drive.google.com/uc?id=12e5qnKAYe7CzTYZZ0HGz3mZOdBDp7scd',
+    'https://drive.google.com/uc?id=1nZlwZXCO63YfqYiDQviGJcb9AsFHzFtk',
+    'https://drive.google.com/uc?id=1lEo0Xk2pTOxwrzJ7-xREaPHD4C7JyTTu',
+    'https://drive.google.com/uc?id=1Lv6fExTrEXNfDw9K_7PgdGtBODz9J2J2',
+    'https://drive.google.com/uc?id=1BX_DRqu1YYXHCwj36xDMnK6qTZqrjygh',
+    'https://drive.google.com/uc?id=1Hfug0K-HlkTJyxD2xgNK1CfB_XTU9IE-',
+    'https://drive.google.com/uc?id=1YL_6iMCTqgsr1eeefan18cM69R6krOKe',
+    'https://drive.google.com/uc?id=1cNZLGlM0QV4VPpA9nkLhvGoL6I4VW9kN',
+    'https://drive.google.com/uc?id=1GUkpWufv5pxeyCEa6X6lHKEiw0C5nkGC',
+    'https://drive.google.com/uc?id=1-9zdcpEf99PLFm1GzK6F__-eyvv2bUkX',
+    'https://drive.google.com/uc?id=1tLCYWZhbPpFM60iJHjs8oLAELBOkqVFZ',
+    'https://drive.google.com/uc?id=1UKP0Ym_W3jj0v-lPPcK5lEOpKUnIET23',
   ];
  
   @override
@@ -123,7 +123,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
-                              fontSize: 22,
+                              fontSize: 20,
                               shadows: <Shadow>[
                                 Shadow(
                                   offset: Offset(0, 0),

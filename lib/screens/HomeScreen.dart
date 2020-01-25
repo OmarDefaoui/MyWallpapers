@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
     _pageController = PageController();
     _searchController = TextEditingController();
-    //_initAds();
+    _initAds();
   }
 
   @override

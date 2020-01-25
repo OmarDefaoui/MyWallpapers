@@ -27,7 +27,7 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    //_initAds();
+    _initAds();
   }
 
   @override

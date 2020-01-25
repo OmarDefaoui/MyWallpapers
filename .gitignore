@@ -39,3 +39,4 @@ lib/generated_plugin_registrant.dart
 # apikey
 /lib/utils/apikey.dart
 /android/app/src/main/res/values/strings.xml
+key.properties

@@ -30,7 +30,7 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
     super.initState();
     imgUrl = widget.imgPath;
     print(imgUrl);
-    //_initAds();
+    _initAds();
   }
 
   @override
