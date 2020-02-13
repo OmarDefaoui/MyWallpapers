@@ -50,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen>
   String _searchInput;
 
   InterstitialAd _interstitialAd;
+  bool _isAdLoaded = false;
 
   @override
   void initState() {
@@ -62,9 +63,11 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void dispose() {
     super.dispose();
-    _pageController.dispose();
-    _searchController.dispose();
-    _interstitialAd?.dispose();
+    try {
+      _pageController.dispose();
+      _searchController.dispose();
+      _interstitialAd?.dispose();
+    } catch (exception) {}
   }
 
   @override
@@ -172,6 +175,8 @@ class _HomeScreenState extends State<HomeScreen>
             duration: Duration(milliseconds: 200),
             curve: Curves.easeIn,
           );
+
+          _showInterstitialAd();
         },
       ),
     );
@@ -209,13 +214,21 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
+  void _showInterstitialAd() {
+    if (_isAdLoaded) {
+      _isAdLoaded = false;
+      _interstitialAd..show();
+    }
+  }
+
   _initAds() {
-    Future.delayed(const Duration(seconds: 2), () {
-      FirebaseAdMob.instance.initialize(appId: admobAppId);
-      _interstitialAd = createInterstitialAd(1)
-        ..load()
-        ..show();
-    });
+    FirebaseAdMob.instance.initialize(appId: admobAppId);
+    _interstitialAd = createInterstitialAd(2)
+      ..load().then((res) {
+        if (res) {
+          _isAdLoaded = true;
+        }
+      });
   }
 
   @override

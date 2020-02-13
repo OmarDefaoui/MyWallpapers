@@ -1,8 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
-import 'package:wallpapers/functions/InterstitialAd.dart';
-import 'package:wallpapers/utils/ApiKey.dart';
 import 'package:wallpapers/utils/SetWallpaper.dart';
 
 class ShowWallpaper extends StatefulWidget {
@@ -23,20 +20,11 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
   bool downloading = false;
   var result = "Waiting to set wallpaper";
 
-  InterstitialAd _interstitialAd;
-
   @override
   void initState() {
     super.initState();
     imgUrl = widget.imgPath;
     print(imgUrl);
-    _initAds();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _interstitialAd?.dispose();
   }
 
   @override
@@ -249,12 +237,5 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
             : Text(""),
       ),
     );
-  }
-
-  _initAds() {
-    FirebaseAdMob.instance.initialize(appId: admobAppId);
-    _interstitialAd = createInterstitialAd(3)
-      ..load()
-      ..show();
   }
 }

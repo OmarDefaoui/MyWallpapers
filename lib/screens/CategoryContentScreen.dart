@@ -33,8 +33,10 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
   @override
   void dispose() {
     super.dispose();
-    _searchController.dispose();
-    _interstitialAd?.dispose();
+    try {
+      _searchController.dispose();
+      _interstitialAd?.dispose();
+    } catch (exception) {}
   }
 
   @override
