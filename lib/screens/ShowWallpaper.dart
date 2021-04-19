@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:wallpapers/functions/InterstitialAd.dart';
 import 'package:wallpapers/utils/SetWallpaper.dart';
+import 'package:wallpapers/widgets/custom_elevated_button.dart';
 
 class ShowWallpaper extends StatefulWidget {
   final String imgPath;
@@ -20,11 +23,22 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
   bool downloading = false;
   var result = "Waiting to set wallpaper";
 
+  InterstitialAd _interstitialAd;
+  bool _isAdLoaded = false;
+
   @override
   void initState() {
     super.initState();
     imgUrl = widget.imgPath;
     print(imgUrl);
+
+    _initAds();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _interstitialAd?.dispose();
   }
 
   @override
@@ -56,133 +70,127 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
               child: Wrap(
                 spacing: 10,
                 children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(90)),
-                    child: RaisedButton(
-                      onPressed: () {
-                        progressString =
-                            SetWallpaper.imageDownloadProgress(imgUrl);
-                        progressString.listen((data) {
-                          setState(() {
-                            res = data;
-                            downloading = true;
-                          });
-                          print("DataReceived: " + data);
-                        }, onDone: () async {
-                          home = await SetWallpaper.homeScreen();
-                          setState(() {
-                            downloading = false;
-                            home = home;
-                          });
-                          print("Task Done");
-                        }, onError: (error) {
-                          setState(() {
-                            downloading = false;
-                          });
-                          print("Some Error");
+                  CustomElevatedButton(
+                    onPressed: () {
+                      _showInterstitialAd();
+
+                      progressString =
+                          SetWallpaper.imageDownloadProgress(imgUrl);
+                      progressString.listen((data) {
+                        setState(() {
+                          res = data;
+                          downloading = true;
                         });
-                      },
-                      textColor: Colors.white,
-                      padding: const EdgeInsets.all(0.0),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: <Color>[
-                              Color(0xFF0D47A1),
-                              Color(0xFF1976D2),
-                              Color(0xFF42A5F5),
-                            ],
-                          ),
+                        print("DataReceived: " + data);
+                      }, onDone: () async {
+                        home = await SetWallpaper.homeScreen();
+                        setState(() {
+                          downloading = false;
+                          home = home;
+                        });
+                        print("Task Done");
+                      }, onError: (error) {
+                        setState(() {
+                          downloading = false;
+                        });
+                        print("Some Error");
+                      });
+                    },
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(90)),
+                        gradient: LinearGradient(
+                          colors: <Color>[
+                            Color(0xFF0D47A1),
+                            Color(0xFF1976D2),
+                            Color(0xFF42A5F5),
+                          ],
                         ),
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(home, style: TextStyle(fontSize: 14)),
                       ),
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(home, style: TextStyle(fontSize: 14)),
                     ),
                   ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(90)),
-                    child: RaisedButton(
-                      onPressed: () {
-                        progressString =
-                            SetWallpaper.imageDownloadProgress(imgUrl);
-                        progressString.listen((data) {
-                          setState(() {
-                            res = data;
-                            downloading = true;
-                          });
-                          print("DataReceived: " + data);
-                        }, onDone: () async {
-                          lock = await SetWallpaper.lockScreen();
-                          setState(() {
-                            downloading = false;
-                            lock = lock;
-                          });
-                          print("Task Done");
-                        }, onError: (error) {
-                          setState(() {
-                            downloading = false;
-                          });
-                          print("Some Error");
+                  CustomElevatedButton(
+                    onPressed: () {
+                      _showInterstitialAd();
+
+                      progressString =
+                          SetWallpaper.imageDownloadProgress(imgUrl);
+                      progressString.listen((data) {
+                        setState(() {
+                          res = data;
+                          downloading = true;
                         });
-                      },
-                      textColor: Colors.white,
-                      padding: const EdgeInsets.all(0.0),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: <Color>[
-                              Color(0xFF0D47A1),
-                              Color(0xFF1976D2),
-                              Color(0xFF42A5F5),
-                            ],
-                          ),
+                        print("DataReceived: " + data);
+                      }, onDone: () async {
+                        lock = await SetWallpaper.lockScreen();
+                        setState(() {
+                          downloading = false;
+                          lock = lock;
+                        });
+                        print("Task Done");
+                      }, onError: (error) {
+                        setState(() {
+                          downloading = false;
+                        });
+                        print("Some Error");
+                      });
+                    },
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(90)),
+                        gradient: LinearGradient(
+                          colors: <Color>[
+                            Color(0xFF0D47A1),
+                            Color(0xFF1976D2),
+                            Color(0xFF42A5F5),
+                          ],
                         ),
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(lock, style: TextStyle(fontSize: 14)),
                       ),
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(lock, style: TextStyle(fontSize: 14)),
                     ),
                   ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(90)),
-                    child: RaisedButton(
-                      onPressed: () {
-                        progressString =
-                            SetWallpaper.imageDownloadProgress(imgUrl);
-                        progressString.listen((data) {
-                          setState(() {
-                            res = data;
-                            downloading = true;
-                          });
-                          print("DataReceived: " + data);
-                        }, onDone: () async {
-                          both = await SetWallpaper.bothScreen();
-                          setState(() {
-                            downloading = false;
-                            both = both;
-                          });
-                          print("Task Done");
-                        }, onError: (error) {
-                          setState(() {
-                            downloading = false;
-                          });
-                          print("Some Error");
+                  CustomElevatedButton(
+                    onPressed: () {
+                      _showInterstitialAd();
+
+                      progressString =
+                          SetWallpaper.imageDownloadProgress(imgUrl);
+                      progressString.listen((data) {
+                        setState(() {
+                          res = data;
+                          downloading = true;
                         });
-                      },
-                      textColor: Colors.white,
-                      padding: const EdgeInsets.all(0.0),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: <Color>[
-                              Color(0xFF0D47A1),
-                              Color(0xFF1976D2),
-                              Color(0xFF42A5F5),
-                            ],
-                          ),
+                        print("DataReceived: " + data);
+                      }, onDone: () async {
+                        both = await SetWallpaper.bothScreen();
+                        setState(() {
+                          downloading = false;
+                          both = both;
+                        });
+                        print("Task Done");
+                      }, onError: (error) {
+                        setState(() {
+                          downloading = false;
+                        });
+                        print("Some Error");
+                      });
+                    },
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(90)),
+                        gradient: LinearGradient(
+                          colors: <Color>[
+                            Color(0xFF0D47A1),
+                            Color(0xFF1976D2),
+                            Color(0xFF42A5F5),
+                          ],
                         ),
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(both, style: TextStyle(fontSize: 14)),
                       ),
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(both, style: TextStyle(fontSize: 14)),
                     ),
                   ),
                 ],
@@ -237,5 +245,21 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
             : Text(""),
       ),
     );
+  }
+
+  _initAds() {
+    _interstitialAd = createInterstitialAd(
+      onLoad: () => _isAdLoaded = true,
+    )..load();
+  }
+
+  void _showInterstitialAd() {
+    //show interstitial ad
+    if (_isAdLoaded)
+      try {
+        _interstitialAd.show();
+      } catch (e) {
+        print('error displaying mAd, error: $e');
+      }
   }
 }

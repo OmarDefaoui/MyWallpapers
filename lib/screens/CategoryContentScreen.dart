@@ -1,10 +1,7 @@
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
-import 'package:wallpapers/functions/InterstitialAd.dart';
 import 'package:wallpapers/functions/ShowAction.dart';
 import 'package:wallpapers/models/PopUpMenuItems.dart';
 import 'package:wallpapers/screens/DisplayWallpapers.dart';
-import 'package:wallpapers/utils/ApiKey.dart';
 
 import 'SearchScreen.dart';
 
@@ -21,13 +18,10 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
   TextEditingController _searchController;
   String _searchInput;
 
-  InterstitialAd _interstitialAd;
-
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    _initAds();
   }
 
   @override
@@ -35,7 +29,6 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
     super.dispose();
     try {
       _searchController.dispose();
-      _interstitialAd?.dispose();
     } catch (exception) {}
   }
 
@@ -91,9 +84,15 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              setState(() {
-                _isSearching = true;
-              });
+              if (_isSearching) {
+                if (_searchInput.trim().isNotEmpty)
+                  _searchWallpapers(_searchInput.trim());
+                else
+                  _clearSearch();
+              } else
+                setState(() {
+                  _isSearching = true;
+                });
             },
           ),
           PopupMenuButton<PopUpMenuItems>(
@@ -140,17 +139,9 @@ class _CategoryContentScreenState extends State<CategoryContentScreen> {
   void _clearSearch() {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _searchController.clear());
+    _searchInput = "";
     setState(() {
       _isSearching = false;
-    });
-  }
-
-  _initAds() {
-    Future.delayed(const Duration(seconds: 2), () {
-      FirebaseAdMob.instance.initialize(appId: admobAppId);
-      _interstitialAd = createInterstitialAd(2)
-        ..load()
-        ..show();
     });
   }
 }

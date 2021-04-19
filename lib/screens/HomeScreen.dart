@@ -1,7 +1,5 @@
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
-import 'package:wallpapers/functions/InterstitialAd.dart';
 import 'package:wallpapers/functions/ShowAction.dart';
 import 'package:wallpapers/models/PopUpMenuItems.dart';
 import 'package:wallpapers/screens/CategoriesScreen.dart';
@@ -49,15 +47,11 @@ class _HomeScreenState extends State<HomeScreen>
   TextEditingController _searchController;
   String _searchInput;
 
-  InterstitialAd _interstitialAd;
-  bool _isAdLoaded = false;
-
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
     _searchController = TextEditingController();
-    _initAds();
   }
 
   @override
@@ -66,12 +60,12 @@ class _HomeScreenState extends State<HomeScreen>
     try {
       _pageController.dispose();
       _searchController.dispose();
-      _interstitialAd?.dispose();
     } catch (exception) {}
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff323639),
@@ -122,9 +116,15 @@ class _HomeScreenState extends State<HomeScreen>
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              setState(() {
-                _isSearching = true;
-              });
+              if (_isSearching) {
+                if (_searchInput.trim().isNotEmpty)
+                  _searchWallpapers(_searchInput.trim());
+                else
+                  _clearSearch();
+              } else
+                setState(() {
+                  _isSearching = true;
+                });
             },
           ),
           PopupMenuButton<PopUpMenuItems>(
@@ -175,8 +175,6 @@ class _HomeScreenState extends State<HomeScreen>
             duration: Duration(milliseconds: 200),
             curve: Curves.easeIn,
           );
-
-          _showInterstitialAd();
         },
       ),
     );
@@ -209,26 +207,10 @@ class _HomeScreenState extends State<HomeScreen>
   void _clearSearch() {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _searchController.clear());
+    _searchInput = "";
     setState(() {
       _isSearching = false;
     });
-  }
-
-  void _showInterstitialAd() {
-    if (_isAdLoaded) {
-      _isAdLoaded = false;
-      _interstitialAd..show();
-    }
-  }
-
-  _initAds() {
-    FirebaseAdMob.instance.initialize(appId: admobAppId);
-    _interstitialAd = createInterstitialAd(2)
-      ..load().then((res) {
-        if (res) {
-          _isAdLoaded = true;
-        }
-      });
   }
 
   @override

@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:wallpapers/functions/InterstitialAd.dart';
 import 'package:wallpapers/screens/CategoryContentScreen.dart';
 import 'package:wallpapers/utils/ApiKey.dart';
 
@@ -34,7 +38,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     'business',
     'music',
   ];
-  final List<String> _categoriesImages = [//replace
+  final List<String> _categoriesImages = [
+    //replace
     'https://drive.google.com/uc?id=1wgQfuncWagmcXOBuwXW95OjoEd6CJoEB',
     'https://drive.google.com/uc?id=1NRh1J3I7aRvfnpRxIYHV42oygGEGyqot',
     'https://drive.google.com/uc?id=1SKu9Z7gRec8vnuY4h27dphlFFFpCa3pw',
@@ -56,93 +61,154 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     'https://drive.google.com/uc?id=1tLCYWZhbPpFM60iJHjs8oLAELBOkqVFZ',
     'https://drive.google.com/uc?id=1UKP0Ym_W3jj0v-lPPcK5lEOpKUnIET23',
   ];
- 
+
+  BannerAd _bannerAd;
+  final Completer<BannerAd> bannerCompleter = Completer<BannerAd>();
+
+  @override
+  void initState() {
+    super.initState();
+    _initAds();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bannerAd?.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var _width = MediaQuery.of(context).size.width;
     return Container(
       color: Color(0xff323639),
-      child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: GridView.builder(
-          shrinkWrap: true,
-          physics: BouncingScrollPhysics(),
-          itemCount: _categories.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.7,
-          ),
-          itemBuilder: (context, index) {
-            return Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+      child: Column(
+        children: [
+          bannerAdBox(),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                itemCount: _categories.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.7,
                 ),
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      width: _width / 2,
-                      height: _width * 0.75,
-                      child: ClipRRect(
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          imageUrl: _categoriesImages[index],
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            child: Image.asset('images/loading.gif'),
-                            color: Colors.black,
-                            alignment: Alignment.center,
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.black,
-                          ),
-                        ),
                       ),
-                    ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => CategoryContentScreen(
-                                title: _categories[index],
-                                url: url + _categories[index] + '&page=',
-                              ),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          color: Colors.black.withOpacity(0.3),
-                          alignment: Alignment.bottomCenter,
-                          padding: EdgeInsets.only(bottom: _width * 0.03),
-                          child: Text(
-                            '${_categories[index][0].toUpperCase()}${_categories[index].substring(1)}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
-                              shadows: <Shadow>[
-                                Shadow(
-                                  offset: Offset(0, 0),
-                                  blurRadius: 5,
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            width: _width / 2,
+                            height: _width * 0.75,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                imageUrl: _categoriesImages[index],
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => Container(
+                                  child: Image.asset('images/loading.gif'),
+                                  color: Colors.black,
+                                  alignment: Alignment.center,
+                                ),
+                                errorWidget: (context, url, error) => Container(
                                   color: Colors.black,
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => CategoryContentScreen(
+                                      title: _categories[index],
+                                      url: url + _categories[index] + '&page=',
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                color: Colors.black.withOpacity(0.3),
+                                alignment: Alignment.bottomCenter,
+                                padding: EdgeInsets.only(bottom: _width * 0.03),
+                                child: Text(
+                                  '${_categories[index][0].toUpperCase()}${_categories[index].substring(1)}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20,
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        offset: Offset(0, 0),
+                                        blurRadius: 5,
+                                        color: Colors.black,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  _initAds() {
+    _bannerAd = createBannerAd(
+      id: 1,
+      onLoad: (BannerAd ad) => bannerCompleter.complete(ad),
+    )..load();
+  }
+
+  Widget bannerAdBox() {
+    return FutureBuilder<BannerAd>(
+      future: bannerCompleter.future,
+      builder: (BuildContext context, AsyncSnapshot<BannerAd> snapshot) {
+        Widget child;
+
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+          case ConnectionState.active:
+            print('mad active');
+            child = SizedBox.shrink();
+            break;
+          case ConnectionState.done:
+            if (snapshot.hasData) {
+              print('mad goooood');
+              child = Container(
+                width: _bannerAd.size.width.toDouble(),
+                height: _bannerAd.size.height.toDouble(),
+                child: AdWidget(ad: _bannerAd),
+              );
+            } else {
+              print('mad else');
+              child = SizedBox.shrink();
+            }
+        }
+
+        return child;
+      },
     );
   }
 }
