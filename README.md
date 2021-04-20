@@ -6,10 +6,10 @@ Our goal is to serve amazing Wallpapers to people arround the world. Bring your 
 
 This app is a great tool for 4K wallpapers and backgrounds | Full HD wallpapers and backgrounds.This app is designed for Android phone & tablet, so this wallpaper app works on any screen size or screen resolution.
 
-★ HD Quality for your viewing pleasure !
-★ Best selection of Wallpapers !
-★ Full Screen Mode! Optimized for your Android !
-★ Set Wallpapers for your Home & Lock Screens or both !
+★ HD Quality for your viewing pleasure !<br>
+★ Best selection of Wallpapers !<br>
+★ Full Screen Mode! Optimized for your Android !<br>
+★ Set Wallpapers for your Home & Lock Screens or both !<br>
 ★ Browse wallpapers by Category !
 
 Features
